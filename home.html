@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minimalist E-Commerce Store</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- Header & Navigation -->
+    <header class="navbar">
+        <div class="logo">Shop<span>Ease</span></div>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Shop</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </nav>
+        <div class="cart-icon" onclick="toggleCart()">
+            🛒 <span id="cart-count">0</span>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Upgrade Your Style</h1>
+            <p>Discover our curated collection of premium essentials with a minimalist aesthetic.</p>
+            <a href="#shop" class="btn">Shop New Arrivals</a>
+        </div>
+    </section>
+
+    <!-- Products Grid Section -->
+    <section id="shop" class="products-section">
+        <h2>Featured Products</h2>
+        <div class="products-grid">
+            
+            <!-- Product 1 -->
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="https://unsplash.com" alt="Minimalist White T-Shirt">
+                </div>
+                <div class="product-info">
+                    <h3>Classic White Tee</h3>
+                    <p class="price">$25.00</p>
+                    <button class="add-to-cart-btn" onclick="addToCart('Classic White Tee', 25.00)">Add to Cart</button>
+                </div>
+            </div>
+
+            <!-- Product 2 -->
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="https://unsplash.com" alt="Red Sneakers">
+                </div>
+                <div class="product-info">
+                    <h3>Sport Sneakers</h3>
+                    <p class="price">$85.00</p>
+                    <button class="add-to-cart-btn" onclick="addToCart('Sport Sneakers', 85.00)">Add to Cart</button>
+                </div>
+            </div>
+
+            <!-- Product 3 -->
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="https://unsplash.com" alt="Wireless Headphones">
+                </div>
+                <div class="product-info">
+                    <h3>Wireless Headphones</h3>
+                    <p class="price">$120.00</p>
+                    <button class="add-to-cart-btn" onclick="addToCart('Wireless Headphones', 120.00)">Add to Cart</button>
+                </div>
+            </div>
+
+            <!-- Product 4 -->
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="https://unsplash.com" alt="Minimalist Watch">
+                </div>
+                <div class="product-info">
+                    <h3>Classic Watch</h3>
+                    <p class="price">$150.00</p>
+                    <button class="add-to-cart-btn" onclick="addToCart('Classic Watch', 150.00)">Add to Cart</button>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Side Cart Slider Widget -->
+    <div id="cart-sidebar" class="cart-sidebar">
+        <div class="cart-header">
+            <h3>Your Cart</h3>
+            <span class="close-cart" onclick="toggleCart()">&times;</span>
+        </div>
+        <div id="cart-items-container" class="cart-body">
+            <p class="empty-msg">Your cart is empty.</p>
+        </div>
+        <div class="cart-footer">
+            <div class="total-row">
+                <span>Total:</span>
+                <span id="cart-total">$0.00</span>
+            </div>
+            <button class="checkout-btn" onclick="alert('Checkout integration requires a backend processing script!')">Proceed to Checkout</button>
+        </div>
+    </div>
+
+    <!-- Simple Dynamic Cart JavaScript Logic -->
+    <script>
+        let cart = [];
+        
+        function toggleCart() {
+            document.getElementById('cart-sidebar').classList.toggle('active');
+        }
+
+        function addToCart(name, price) {
+            const existingItem = cart.find(item => item.name === name);
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({ name, price, quantity: 1 });
+            }
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const container = document.getElementById('cart-items-container');
+            const countBadge = document.getElementById('cart-count');
+            const totalSpan = document.getElementById('cart-total');
+            
+            if (cart.length === 0) {
+                container.innerHTML = '<p class="empty-msg">Your cart is empty.</p>';
+                countBadge.textContent = '0';
+                totalSpan.textContent = '$0.00';
+                return;
+            }
+
+            let totalItems = 0;
+            let totalPrice = 0;
+            container.innerHTML = '';
+
+            cart.forEach(item => {
+                totalItems += item.quantity;
+                totalPrice += item.price * item.quantity;
+
+                const itemRow = document.createElement('div');
+                itemRow.className = 'cart-item';
+                itemRow.innerHTML = `
+                    <div>
+                        <h4>${item.name}</h4>
+                        <small>$${item.price.toFixed(2)} x ${item.quantity}</small>
+                    </div>
+                    <strong>$${(item.price * item.quantity).toFixed(2)}</strong>
+                `;
+                container.appendChild(itemRow);
+            });
+
+            countBadge.textContent = totalItems;
+            totalSpan.textContent = `$${totalPrice.toFixed(2)}`;
+        }
+    </script>
+</body>
+</html>
